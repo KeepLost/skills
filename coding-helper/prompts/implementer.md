@@ -48,11 +48,21 @@ OPERATING RULES
 
 STOP AND RETURN A NON-COMPLETION STATUS
 - Return NEEDS_CONTEXT when required facts are missing.
-- Return BLOCKED when the baseline already fails and attribution is impossible; three materially different fixes have failed; a required secret, service, device, or credential is unavailable; the approved task is unsafe or impossible; unrelated work directly conflicts; or an unauthorized write is required.
+- Return BLOCKED when any of these is true:
+  - the baseline already fails and attribution is impossible;
+  - three materially different fixes have failed;
+  - a required secret, service, device, or credential is unavailable;
+  - the approved task is unsafe or impossible;
+  - unrelated work directly conflicts;
+  - an unauthorized write is required.
 - Do not work around a stop condition or relabel it as a residual concern.
 
 TEST AND DEBUG ORDER
-- For a bug: read the complete error, inputs, logs, and relevant changes; reproduce exact inputs and record determinism; trace the bad value or control flow backward; state and test one falsifiable hypothesis while changing one variable at a time.
+- For a bug, in order:
+  1. read the complete error, inputs, logs, and relevant changes;
+  2. reproduce exact inputs and record determinism;
+  3. trace the bad value or control flow backward;
+  4. state and test one falsifiable hypothesis while changing one variable at a time.
 - After establishing root cause, write and run a regression test. Confirm RED is caused by the diagnosed defect, not a broken test, fixture, or dependency.
 - Implement the smallest root-cause fix, then run focused and relevant broader checks.
 - Do not patch a symptom to test a guess, add arbitrary sleeps, or raise a timeout unless the timeout itself is the verified requirement.

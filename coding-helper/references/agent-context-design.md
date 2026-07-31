@@ -61,7 +61,12 @@ Frequent misdiagnoses:
 
 ### Claim Provenance And Conflicts
 
-For each consequential claim, track the exact claim and whether it is fact, decision, assumption, or inference; its source location and version or timestamp; the downstream decisions relying on it; and its verification and conflict status.
+For each consequential claim, track:
+
+- the exact claim and whether it is fact, decision, assumption, or inference;
+- its source location and version or timestamp;
+- the downstream decisions relying on it;
+- its verification and conflict status.
 
 Corrections must replace bad claims, not sit beside them. When dependents cannot be audited safely, return to the last verified state.
 
@@ -206,7 +211,13 @@ Do not promote temporary guesses into durable memory, and do not use durable mem
 
 Use scratch storage for large observations and intermediate state that would crowd active context. Keep a compact reference with path, source, purpose, creation time, and summary.
 
-A well-formed scratch class has a task- or session-scoped directory the agent owns; discoverable names rather than anonymous files; a defined cleanup owner and trigger (completion, cancellation, or expiry); bounded reads and targeted search for large content; and graceful behavior when a referenced file is missing.
+A well-formed scratch class has:
+
+- a task- or session-scoped directory the agent owns;
+- discoverable names rather than anonymous files;
+- a defined cleanup owner and trigger (completion, cancellation, or expiry);
+- bounded reads and targeted search for large content;
+- graceful behavior when a referenced file is missing.
 
 Scratch storage must live in a path the agent created for that purpose. Deleting anything else, including untracked files in the user's working tree, is subject to the authorization rules in [`../SKILL.md`](../SKILL.md).
 
@@ -232,7 +243,15 @@ Use meaningful paths, clear headings, and compact indexes. References must survi
 
 Keep source material immutable when it serves as recovery evidence. Write derived summaries separately and link them to the source.
 
-A complete state design also answers what happens when each class ends: which scratch output is disposable and who disposes of it; how a shared artifact is marked finished versus abandoned; what qualifies information for promotion to durable memory; how stale references and duplicate keys get resolved; and who holds ownership, access, and cleanup responsibility afterward. A design that answers only the write path leaves stale state able to pose as current truth.
+A complete state design also answers what happens when each class ends:
+
+- which scratch output is disposable and who disposes of it;
+- how a shared artifact is marked finished versus abandoned;
+- what qualifies information for promotion to durable memory;
+- how stale references and duplicate keys get resolved;
+- who holds ownership, access, and cleanup responsibility afterward.
+
+A design that answers only the write path leaves stale state able to pose as current truth.
 
 Externalization succeeds only if retrieval is more selective than reloading the original context. Nothing in that lifecycle authorizes deleting or reverting state you do not own — [`../SKILL.md`](../SKILL.md) governs that, and §10 owns what finishing a task requires.
 
@@ -258,7 +277,15 @@ Probe answers are model output, not command output. They tell you whether a cont
 
 ## Recovery From A Bad Context
 
-Recovery runs least-lossy first, and each step should be available by design rather than improvised: revert the most recent context transformation; restore exact source material from retained history or external state; remove unsupported summary claims and re-establish provenance; rebuild a minimal context holding current task, constraints, verified facts, artifact state, and next action; then retry with a less lossy intervention. A clean context carrying forward only independently verified state is the last resort.
+Recovery runs least-lossy first, and each step should be available by design rather than improvised:
+
+1. revert the most recent context transformation;
+2. restore exact source material from retained history or external state;
+3. remove unsupported summary claims and re-establish provenance;
+4. rebuild a minimal context holding current task, constraints, verified facts, artifact state, and next action;
+5. then retry with a less lossy intervention.
+
+A clean context carrying forward only independently verified state is the last resort.
 
 Revert and restore here mean agent-owned context and state, not the user's files or version-control history. Reversing anything else follows the authorization rules in [`../SKILL.md`](../SKILL.md).
 

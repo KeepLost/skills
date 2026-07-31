@@ -26,7 +26,14 @@ The skill itself is offline-capable.
 2. Inspect before changing. Use an available code index first; otherwise use focused search and file reads. Do not guess architecture from filenames.
 3. Protect concurrent work. Never discard, overwrite, or reformat unrelated user or agent changes. Treat everything you did not just write as user-owned. Stop and ask only when they directly conflict.
 4. Prefer the smallest correct change. Do not add compatibility layers, abstractions, dependencies, or refactors without a concrete need.
-5. Treat every Git write as user-owned. Read-only inspection is safe. Do not do any of the following without explicit user authorization for that specific operation: stage, commit, amend, merge, rebase, cherry-pick, tag; create, switch, rename, or delete a branch; create, move, lock, prune, or remove a worktree; push, force-push, change tracking, open or modify a PR; discard files, clean untracked files, or rewrite history. A task plan, repository convention, or reviewer suggestion is not authorization. Push authorization does not imply PR authorization, or the reverse.
+5. Treat every Git write as user-owned. Read-only inspection is safe. Do not do any of the following without explicit user authorization for that specific operation:
+   - stage, commit, amend, merge, rebase, cherry-pick, tag;
+   - create, switch, rename, or delete a branch;
+   - create, move, lock, prune, or remove a worktree;
+   - push, force-push, change tracking, open or modify a PR;
+   - discard files, clean untracked files, or rewrite history.
+
+   A task plan, repository convention, or reviewer suggestion is not authorization. Push authorization does not imply PR authorization, or the reverse.
 6. Match process depth to risk. A one-line exact edit is not a design project; a cross-system behavior change is not a one-line task. Calibration:
    - "Fix this typo in the log message" → edit, verify it builds, done. No task list, no design, no new tests.
    - "Add a `--dry-run` flag to the existing CLI command" → small plan (§4), one focused test (§6.2 new-behavior), implement, verify.
@@ -100,21 +107,21 @@ In design mode:
 1. Ask one focused question at a time. Prefer questions that distinguish real alternatives; never ask for facts the repository or supplied specification already answers.
 2. Surface oversized scope early and split independent subsystems into separately testable slices.
 3. Present two or three viable approaches with a recommendation. For each, cover architecture and ownership boundaries, data and control flow, failure handling and observability, migration or compatibility impact, testability and operational cost, and complexity introduced now and later. Do not invent alternatives merely to satisfy a count.
-4. A sufficient design answers all of: which components change and what each owns; what inputs, outputs, invariants, and interfaces connect them; where state lives and who may mutate it; what happens on invalid input, partial failure, retries, or cancellation; which trust, permission, privacy, or secret boundaries apply; how compatibility and rollout are handled if relevant; which automated tests and runtime checks demonstrate success; what is explicitly out of scope.
+4. A sufficient design answers all of these:
+   - which components change and what each owns;
+   - what inputs, outputs, invariants, and interfaces connect them;
+   - where state lives and who may mutate it;
+   - what happens on invalid input, partial failure, retries, or cancellation;
+   - which trust, permission, privacy, or secret boundaries apply;
+   - how compatibility and rollout are handled if relevant;
+   - which automated tests and runtime checks demonstrate success;
+   - what is explicitly out of scope.
 5. Obtain user approval before implementing the unresolved design. Approval of one section does not imply approval of a materially changed scope.
 
 Skip design ceremony for an approved specification, exact edit, narrow bug, or mechanical change that creates no new product or architecture decision.
 
-For a visual decision, first ask whether the difference between the alternatives
-can be understood and decided from text. If text is insufficient and the user is
-also likely to have difficulty understanding or choosing between the options,
-propose making small front-end/HTML mockup pages for visual comparison. Do not
-start this channel automatically: only after the user agrees to this method may
-you use the local companion documented in
-[`tools/visual-companion/visual-companion.md`](tools/visual-companion/visual-companion.md).
-It is a strictly local-only interaction channel for presenting alternatives and
-collecting the user's visual feedback; it does not replace the user's explicit
-decision or produce production UI code by itself.
+For a visual decision, first ask whether the difference between the alternatives can be understood and decided from text. If text is insufficient and the user is also likely to have difficulty understanding or choosing between the options, propose making small front-end/HTML mockup pages for visual comparison. 
+Do not start this channel automatically: only after the user agrees to this method may you use the local companion documented in [`tools/visual-companion/visual-companion.md`](tools/visual-companion/visual-companion.md) for the proposed visual comparison. It is a strictly local-only interaction channel for presenting alternatives and collecting the user's visual feedback; it does not replace the user's explicit decision or produce production UI code by itself.
 
 ## 4. Plan and Track
 
@@ -149,9 +156,21 @@ GOOD: Objective: limit /login to 5 attempts/min per IP (req R3).
 
 Split tasks where a reviewer could approve one deliverable and reject another. Keep setup, schema, documentation, and configuration with the behavior that needs them unless independently useful.
 
-A plan must not contain: tasks that only say "implement", "handle errors", or "add tests"; placeholders such as `TBD`, `TODO`, or "similar to the previous task"; signatures used by later tasks but never defined; unrelated refactoring hidden inside feature work; commit, push, merge, or PR steps presented as automatic work.
+A plan must not contain:
 
-Before executing a plan, check it yourself: map every requirement and non-goal to at least one task or decision; verify paths, names, types, and signatures are consistent across tasks; confirm each behavior-changing task has meaningful failure evidence; confirm commands suit this repository and are not invented; record unresolved risks and ask rather than silently choosing.
+- tasks that only say "implement", "handle errors", or "add tests";
+- placeholders such as `TBD`, `TODO`, or "similar to the previous task";
+- signatures used by later tasks but never defined;
+- unrelated refactoring hidden inside feature work;
+- commit, push, merge, or PR steps presented as automatic work.
+
+Before executing a plan, check it yourself:
+
+- map every requirement and non-goal to at least one task or decision;
+- verify paths, names, types, and signatures are consistent across tasks;
+- confirm each behavior-changing task has meaningful failure evidence;
+- confirm commands suit this repository and are not invented;
+- record unresolved risks and ask rather than silently choosing.
 
 Do not require a persistent plan for a trivial single-step task. Plan commit checkpoints are suggestions, never authorization to execute Git operations (contract §5). For independent plan review, use `prompts/plan-reviewer.md`.
 
@@ -167,7 +186,13 @@ Deciding examples:
 - "Find every place we read `config.yaml` and summarize how each is used" → read-only, splittable → delegate in parallel to several searchers.
 - "Rename `Order.total` and update all call sites and their tests" → one shared contract, overlapping edits → keep local and sequential; do not parallelize.
 
-Parallelize independent research and diagnosis freely. Be conservative with parallel implementation in one checkout. Before parallel dispatch, verify all of: scopes are independent and do not edit the same files; one result cannot invalidate another agent's assumptions; commands do not contend for the same database, port, device, or fixture; each agent can finish without waiting for another; integration and full-suite verification have a clear owner.
+Parallelize independent research and diagnosis freely. Be conservative with parallel implementation in one checkout. Before parallel dispatch, verify all of:
+
+- scopes are independent and do not edit the same files;
+- one result cannot invalidate another agent's assumptions;
+- commands do not contend for the same database, port, device, or fixture;
+- each agent can finish without waiting for another;
+- integration and full-suite verification have a clear owner.
 
 Each assignment must contain one bounded objective, full task requirements and relevant non-goals, exact file or subsystem scope, essential architecture and neighboring interfaces, known errors and commands with expected evidence, constraints on edits and shared resources, and a required return status. Do not pass full conversation history as a substitute for curated context. Use `prompts/implementer.md` for implementation assignments.
 
@@ -283,9 +308,27 @@ Review and verification answer different questions. Requirement review asks whet
 
 Review the complete change, not only the latest edit.
 
-Requirement review — read the requirements independently of any implementation summary, then inspect the actual diff and surrounding code for: every requested behavior, constraint, and acceptance criterion; explicit non-goals and unchanged contracts; missing error paths, migrations, documentation, or platform handling; extra features, dependencies, compatibility layers, or refactors; mismatches in names, types, defaults, copy, and interfaces; tests that prove each observable requirement rather than merely execute code.
+Requirement review — read the requirements independently of any implementation summary, then inspect the actual diff and surrounding code for:
 
-Quality review — after requirement compliance is established, inspect for: incorrect logic, boundary errors, races, stale state, unsafe assumptions; security, permission, privacy, secret-handling, and injection risks; error handling that loses context or leaves partial state; public contract regressions and compatibility hazards; unnecessary complexity, duplication, coupling, or speculative abstraction; weak, flaky, over-mocked, or missing tests; performance issues on realistic paths and data sizes; misleading names, comments, docs, or dead code. Also confirm generated and copied material contains no placeholders, stale names, credentials, or dead links.
+- every requested behavior, constraint, and acceptance criterion;
+- explicit non-goals and unchanged contracts;
+- missing error paths, migrations, documentation, or platform handling;
+- extra features, dependencies, compatibility layers, or refactors;
+- mismatches in names, types, defaults, copy, and interfaces;
+- tests that prove each observable requirement rather than merely execute code.
+
+Quality review — after requirement compliance is established, inspect for:
+
+- incorrect logic, boundary errors, races, stale state, unsafe assumptions;
+- security, permission, privacy, secret-handling, and injection risks;
+- error handling that loses context or leaves partial state;
+- public contract regressions and compatibility hazards;
+- unnecessary complexity, duplication, coupling, or speculative abstraction;
+- weak, flaky, over-mocked, or missing tests;
+- performance issues on realistic paths and data sizes;
+- misleading names, comments, docs, or dead code.
+
+Also confirm generated and copied material contains no placeholders, stale names, credentials, or dead links.
 
 Report findings ordered by severity, using these definitions:
 
@@ -305,7 +348,17 @@ Critical and Important findings are blocking and must be resolved before integra
 
 If there are no findings, say so and identify residual testing or environment gaps.
 
-When receiving review feedback: read all items before changing code; clarify ambiguous or mutually dependent items; verify each claim against current code, requirements, and platform support; implement correct findings one at a time; push back factually when advice is incorrect, unnecessary, or incompatible; rerun affected tests after each behavior-changing correction; request re-review of the complete affected scope. Feedback is technical input, not automatic authority. Do not performatively agree, blindly implement, or silently ignore a finding. Escalate conflicts with user-approved architecture to the user.
+When receiving review feedback:
+
+1. Read all items before changing code.
+2. Clarify ambiguous or mutually dependent items.
+3. Verify each claim against current code, requirements, and platform support.
+4. Implement correct findings one at a time.
+5. Push back factually when advice is incorrect, unnecessary, or incompatible.
+6. Rerun affected tests after each behavior-changing correction.
+7. Request re-review of the complete affected scope.
+
+Feedback is technical input, not automatic authority. Do not performatively agree, blindly implement, or silently ignore a finding. Escalate conflicts with user-approved architecture to the user.
 
 ## 9. Verify With Fresh Evidence
 
@@ -319,7 +372,14 @@ For every completion claim:
 4. Count failures, warnings, skipped checks, and untested requirements.
 5. Make only the claim the evidence supports.
 
-Run checks from narrow to broad: the exact regression or new-behavior test; the containing file or component suite; tests for callers, integrations, and affected contracts; type checking, linting, static analysis, or build as applicable; the full suite when practical and proportionate; a runtime smoke check when automated tests do not cover integration reality.
+Run checks from narrow to broad:
+
+1. the exact regression or new-behavior test;
+2. the containing file or component suite;
+3. tests for callers, integrations, and affected contracts;
+4. type checking, linting, static analysis, or build as applicable;
+5. the full suite when practical and proportionate;
+6. a runtime smoke check when automated tests do not cover integration reality.
 
 Each claim requires its own proof:
 
@@ -348,11 +408,33 @@ Before final response:
 - State residual risks, skipped checks, and user decisions still required.
 - Do not expose secrets or dump large logs.
 
-Verification is not integration. Do not commit, amend, push, merge, delete branches, or create a PR as part of finishing (contract §5). Present the options and let the user choose: keep the branch or worktree as-is; commit locally; push or open a PR; merge locally; remove or discard work. Never delete a branch, remove a worktree, or discard uncommitted work as routine cleanup.
+Verification is not integration. Do not commit, amend, push, merge, delete branches, or create a PR as part of finishing (contract §5). Present the options and let the user choose:
 
-When the user explicitly authorizes a commit: recheck status, intended diff, staged diff, and recent commit style; run fresh relevant verification before staging; stage only intended paths; scan the staged diff for secrets and generated noise; use a concise repository-style message; report the commit identifier and any remaining unstaged changes. Do not amend unless explicitly asked. If hooks fail, fix the issue and seek authorization for the next commit action.
+- keep the branch or worktree as-is;
+- commit locally;
+- push or open a PR;
+- merge locally;
+- remove or discard work. Never delete a branch, remove a worktree, or discard uncommitted work as routine cleanup.
 
-When the user explicitly authorizes a push or PR: inspect tracking, remotes, branch state, included commits, and the full base diff; rerun relevant checks on the final state; describe actual changes, tests, risks, and known limitations; return the remote or PR URL when available. Never force-push unless explicitly requested and the risk is understood.
+When the user explicitly authorizes a commit:
+
+1. Recheck status, intended diff, staged diff, and recent commit style.
+2. Run fresh relevant verification before staging.
+3. Stage only intended paths.
+4. Scan the staged diff for secrets and generated noise.
+5. Use a concise repository-style message.
+6. Report the commit identifier and any remaining unstaged changes.
+
+Do not amend unless explicitly asked. If hooks fail, fix the issue and seek authorization for the next commit action.
+
+When the user explicitly authorizes a push or PR:
+
+1. Inspect tracking, remotes, branch state, included commits, and the full base diff.
+2. Rerun relevant checks on the final state.
+3. Describe actual changes, tests, risks, and known limitations.
+4. Return the remote or PR URL when available.
+
+Never force-push unless explicitly requested and the risk is understood.
 
 Completion means the requested outcome is implemented or answered, relevant evidence is fresh, and the report accurately states both success and limits.
 
@@ -381,3 +463,4 @@ When you are sure the current task is completed, clear your TODO list; otherwise
 This skill shall contain no external AI/API service, so that it can be faithfully executed by an AI agent in an offline environment.
 
 This `SKILL.md` describes normative guidelines for the whole coding lifecycle. As to other files, some give detailed guidance for specific domain, some give detailed explanation on these guidelines, and some give optional pure advice/utility. Lengthy `SKILL.md` is a trade-off for better alignment; others follow the principle of progressive disclosure.
+
