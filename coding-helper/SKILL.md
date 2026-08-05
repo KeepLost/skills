@@ -77,6 +77,8 @@ Worked routing example:
 
 ## 2. Understand the Work
 
+If, and only if, the user explicitly requests reverse engineering, security assessment, penetration testing, forensics, threat hunting, or vulnerability analysis, read `../security-analysis/index.md` before any domain-specific investigation or action and follow its single-topic routing. Do not infer this trigger merely because ordinary engineering work involves authentication, permissions, cryptography, input validation, or other security-relevant code.
+
 Before substantive edits:
 
 - Read applicable project instructions, specifications, and architecture docs.
@@ -463,4 +465,3 @@ When you are sure the current task is completed, clear your TODO list; otherwise
 This skill shall contain no external AI/API service, so that it can be faithfully executed by an AI agent in an offline environment.
 
 This `SKILL.md` describes normative guidelines for the whole coding lifecycle. As to other files, some give detailed guidance for specific domain, some give detailed explanation on these guidelines, and some give optional pure advice/utility. Lengthy `SKILL.md` is a trade-off for better alignment; others follow the principle of progressive disclosure.
-
