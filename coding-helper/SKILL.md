@@ -77,7 +77,7 @@ Worked routing example:
 
 ## 2. Understand the Work
 
-If, and only if, the user explicitly requests reverse engineering, security assessment, penetration testing, forensics, threat hunting, or vulnerability analysis, read `../security-analysis/index.md` before any domain-specific investigation or action and follow its single-topic routing. Do not infer this trigger merely because ordinary engineering work involves authentication, permissions, cryptography, input validation, or other security-relevant code.
+If, and only if, the user explicitly requests reverse engineering, security assessment, penetration testing, forensics, threat hunting, or vulnerability analysis, read `../security-analysis/index.md` before any domain-specific investigation or action and follow its single-topic routing. (Notice the `..` in file path; it's _not_ a mistake) Do not infer this trigger merely because ordinary engineering work involves authentication, permissions, cryptography, input validation, or other security-relevant code.
 
 Before substantive edits:
 

@@ -1,0 +1,12 @@
+[project]
+name = "openclaw-markdown-converter"
+version = "0.1.0"
+description = "Python dependencies for the OpenClaw markdown-converter skill"
+requires-python = ">=3.10"
+dependencies = [
+    "firecrawl-anydoc",
+    "markitdown[all]",
+]
+
+[tool.uv]
+package = false
