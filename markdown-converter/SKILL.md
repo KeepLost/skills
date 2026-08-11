@@ -40,8 +40,8 @@ Confirm both backends are available:
 | HTML, JSON, XML | MarkItDown |
 | ZIP, Outlook messages | MarkItDown |
 | Image or audio metadata | MarkItDown |
-| Scanned or image-only PDF | local OCR workflow |
-| Remote URL, YouTube, hosted OCR, cloud conversion, or external model/API | explain the network operation and obtain explicit user consent first |
+| Scanned or image-only PDF | MarkItDown; local OCR workflow |
+| Remote URL, YouTube, hosted OCR, cloud conversion, or external model/API | MarkItDown; explain the network operation and obtain explicit user consent first |
 
 ## Convert with firecrawl-anydoc
 
