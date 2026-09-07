@@ -91,6 +91,21 @@ Before substantive edits:
 
 Stop investigation when enough evidence exists to make the next decision. Do not turn context gathering into an unbounded repository survey.
 
+When the user asks whether a project, module, dependency, abstraction, configuration layer, or change is over-engineered or more complex than its actual needs justify, read `references/complexity-review.md` after this skill and apply it within the requested review boundary. Do not load that reference for ordinary implementation, bug fixing, or general review unless the user also requests a complexity assessment.
+
+### Minimality Gate
+
+After understanding the task and tracing the affected flow, check these options in order and stop at the first one that satisfies the requirement:
+
+1. Remove work that is not actually required.
+2. Reuse an existing helper, type, module, or repository pattern.
+3. Use the standard library.
+4. Use a native platform or framework capability.
+5. Use an already-installed dependency.
+6. Use the smallest clear implementation.
+
+The shortest diff is preferable only after correctness, boundary behavior, and the requested contract are understood. Minimality never overrides validation, security, error handling, accessibility, tests required by this skill, or an explicit user requirement.
+
 ## 3. Shape Only When Needed
 
 Decide with this test: enter design mode if ANY of these is true — otherwise skip straight to implementation.
@@ -225,7 +240,7 @@ Follow this order. Do not reorder it.
 2. Reproduce with exact inputs and record whether it is deterministic. Trace malformed data and unexpected control flow backward to its origin, including across process, service, queue, file, and database boundaries.
 3. State one falsifiable hypothesis: cause, mechanism, and expected observation. Test one variable at a time. If reproduction is intermittent, add instrumentation or condition-based observation instead of guessing; do not add arbitrary sleeps or raise timeouts unless the timeout itself is the verified requirement.
 4. After the cause is understood, write a failing regression test and run it. Confirm it fails because the diagnosed defect is present, not from a typo, broken fixture, missing dependency, or unrelated baseline failure. A valid regression test names the behavior rather than the implementation detail, exercises real code where practical, has a clear expected failure message or value, passes only when the root cause is corrected, and stays useful against recurrence.
-5. Implement the smallest fix at the root cause. Do not bundle cleanup, dependency upgrades, compatibility layers, or neighboring behavior unless the fix genuinely requires them.
+5. Implement the smallest fix at the root cause. Do not bundle cleanup, dependency upgrades, compatibility layers, or neighboring behavior unless the fix genuinely requires them. When changing a shared function, inspect its callers and sibling entry paths first, then fix the shared invariant at the narrowest common boundary instead of duplicating guards only in the reported caller.
 6. Verify the regression, surrounding behavior, and relevant quality checks (§9).
 
 If automation is not feasible, use a minimal reproducible script or documented runtime check and state the limitation explicitly. If three materially different fix attempts fail, stop stacking patches and return to Stop Conditions.
@@ -286,6 +301,8 @@ Before the first edit: read the complete approved requirement or plan, inspect p
 - Validate inputs and errors at meaningful boundaries, not every layer by habit.
 - Avoid hidden global state, speculative extensibility, and test-only production APIs.
 - Add dependencies only after confirming the project does not already provide the capability and the dependency is justified.
+- Prefer deletion or reuse over addition when the requested behavior remains correct and observable. Do not add an abstraction, dependency, configuration layer, or wrapper until existing repository and platform capabilities have been checked.
+- When intentionally accepting a known limitation, leave a concise `ponytail:` comment naming both the ceiling and the upgrade trigger or path. This documents a bounded tradeoff; it does not replace required tests, monitoring, security review, or an explicit requirement.
 - Keep secrets out of source, examples, logs, patches, archives, and prompts.
 - After each coherent step, inspect the resulting diff before continuing.
 
@@ -329,6 +346,19 @@ Quality review — after requirement compliance is established, inspect for:
 - weak, flaky, over-mocked, or missing tests;
 - performance issues on realistic paths and data sizes;
 - misleading names, comments, docs, or dead code.
+
+For complexity findings, optional tags may classify the issue without replacing
+the required severity, trigger, impact, and correction fields:
+
+- `delete`: dead code, unused flexibility, or speculative behavior;
+- `stdlib`: hand-written logic already provided by the standard library;
+- `native`: code or a dependency duplicating a platform or framework capability;
+- `yagni`: an abstraction, configuration layer, or wrapper without a current need;
+- `shrink`: equivalent behavior expressible with a smaller clear change.
+
+These tags cover complexity only. They do not authorize removing validation,
+security, error handling, accessibility, tests, or behavior required by the
+task.
 
 Also confirm generated and copied material contains no placeholders, stale names, credentials, or dead links.
 
